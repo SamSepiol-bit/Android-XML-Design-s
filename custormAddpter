@@ -1,0 +1,61 @@
+package com.icbt.customlist;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+public class CustomAdapter extends ArrayAdapter<String> {
+    private final Context context;
+    private final String[] fruitList;
+    private final String[] description;
+    private final int[] imageIds;
+
+    // Correct the constructor name (from 'piblic' to 'public')
+    public CustomAdapter(Context context, String[] fruitList, String[] description, int[] imageIds) {
+        super(context, R.layout.list_item, fruitList);
+        this.context = context;
+        this.fruitList = fruitList;
+        this.description = description;
+        this.imageIds = imageIds;
+    }
+
+    @NonNull
+    @Override
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        // Inflate the custom layout for each row
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = inflater.inflate(R.layout.list_item, parent, false);
+
+        // Find views in the inflated layout
+        TextView textView = rowView.findViewById(R.id.textView);
+        TextView subTextView = rowView.findViewById(R.id.subtextView);
+        ImageView imageView = rowView.findViewById(R.id.imageView);
+        Button actionButton = rowView.findViewById(R.id.actionButton);
+
+        // Set the data for each row based on position
+        textView.setText(fruitList[position]);
+        subTextView.setText(description[position]);
+        imageView.setImageResource(imageIds[position]);
+
+        // Set an onClickListener for the button in each row
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show a Toast with the fruit name when the button is clicked
+                Toast.makeText(context, "Clicked on " + fruitList[position], Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Return the populated row view
+        return rowView;
+    }
+}
